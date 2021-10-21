@@ -1,0 +1,9 @@
+{
+  "name": "dialer",
+  "version": "1.0.0",
+  "description": "dialer app for smart problemset",
+  "main": "index.js",
+  "repository": "https://kurzy.kpi.fei.tuke.sk/smart",
+  "author": "marcin",
+  "license": "MIT"
+}
