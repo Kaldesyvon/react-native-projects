@@ -1,0 +1,12 @@
+{
+  "name": "smart-2021",
+  "version": "1.0.0",
+  "description": "smart tuke",
+  "main": "index.js",
+  "repository": "https://kurzy.kpi.fei.tuke.sk/smart",
+  "author": "marcin",
+  "license": "MIT",
+  "dependencies": {
+    "react-native": "^0.66.1"
+  }
+}
