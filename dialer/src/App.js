@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {View, StyleSheet, Text, Pressable, Image} from 'react-native';
-// const RNImmediatePhoneCall = require('../node_modules/react-native-immediate-phone-call/android');
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 
 

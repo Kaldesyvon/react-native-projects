@@ -1,13 +1,12 @@
 {
   "name": "smart-2021",
   "version": "1.0.0",
-  "description": "smart tuke",
+  "description": "projcts dir for smart",
   "main": "index.js",
-  "repository": "https://kurzy.kpi.fei.tuke.sk/smart",
-  "author": "marcin",
+  "repository": "https://git.kpi.fei.tuke.sk/martin.novysedlak.2/smart-2021.git",
+  "author": "Martin Novysedlak <martin.novysedlak.2@student.tuke.sk>",
   "license": "MIT",
   "dependencies": {
-    "react-native": "^0.66.1",
-    "react-native-immediate-phone-call": "^2.0.0"
+    "react-native": "^0.66.1"
   }
 }
