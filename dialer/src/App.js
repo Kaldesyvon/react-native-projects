@@ -81,9 +81,8 @@ export default function App() {
         return () => setNumber(getNumber => getNumber + numberToAdd);
     }
 
-    function makeCall(number) {
-        return RNImmediatePhoneCall.immediatePhoneCall(number);
-        console.log('dialing');
+    function makeCall() {
+        return () => RNImmediatePhoneCall.immediatePhoneCall(getNumber);
     }
 
     return (
@@ -155,7 +154,7 @@ export default function App() {
             </View>
             <View style={styles.call}>
                 <View style={styles.empty}/>
-                <Pressable style={styles.dial} onPress={() => RNImmediatePhoneCall.immediatePhoneCall(getNumber)}>
+                <Pressable style={styles.dial} onPress={makeCall()}>
                     <Image style={{width:50,height:50}} source={require('./assets/phone-call.png')}/>
                 </Pressable>
                 <View style={styles.backspace}>

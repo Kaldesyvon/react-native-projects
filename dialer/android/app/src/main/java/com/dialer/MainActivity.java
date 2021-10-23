@@ -1,6 +1,7 @@
 package com.dialer;
 
 import com.facebook.react.ReactActivity;
+import com.github.wumke.RNImmediatePhoneCall.RNImmediatePhoneCallPackage;  // <--- import
 
 public class MainActivity extends ReactActivity {
 
