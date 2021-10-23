@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {View, StyleSheet, Text, Pressable, Image} from 'react-native';
+import {View, StyleSheet, Text, Pressable, Image, ToastAndroid} from 'react-native';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 
 
@@ -78,10 +78,24 @@ export default function App() {
     const [getNumber, setNumber] = useState('');
 
     function addNumber(numberToAdd){
-        return () => setNumber(getNumber => getNumber + numberToAdd);
+        if(getNumber.length < 12){
+            let number = '';
+            if(((getNumber[0] === '0'&& getNumber[1]==='9')&& getNumber.length === 4)
+                || (getNumber[0] === '0'&& getNumber[1]==='9')&& getNumber.length === 8){
+                number += ' ';
+            } else if(((getNumber[0] === '0'&& getNumber[1]==='5'&&getNumber[2]==='3')&& getNumber.length === 3)
+            || (getNumber[0] === '0'&& getNumber[1]==='5'&&getNumber[2]==='3')&& getNumber.length === 7){
+            number += ' ';
+            }
+            number += numberToAdd;
+            return () => setNumber(getNumber => getNumber + number);
+        }
     }
 
     function makeCall() {
+        if(getNumber === ''){
+            return () => ToastAndroid.showWithGravity('Please, enter a number', 1500, ToastAndroid.CENTER);
+        }
         return () => RNImmediatePhoneCall.immediatePhoneCall(getNumber);
     }
 
@@ -91,7 +105,7 @@ export default function App() {
                 <Text style={{fontSize:20}}>Phone</Text>
             </View>
             <View style={styles.numbers}>
-                <Text style={{color: 'black', fontSize: 60, fontWeight: 'bold'}}>
+                <Text style={{color: 'black', fontSize: 45, fontWeight: 'bold'}}>
                     {getNumber}
                 </Text>
             </View>
