@@ -12,6 +12,8 @@ target 'dialer' do
     :hermes_enabled => false
   )
 
+  pod 'react-native-immediate-phone-call', :path => '../node_modules/react-native-immediate-phone-call'
+
   target 'dialerTests' do
     inherit! :complete
     # Pods for testing

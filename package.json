@@ -7,6 +7,7 @@
   "author": "marcin",
   "license": "MIT",
   "dependencies": {
-    "react-native": "^0.66.1"
+    "react-native": "^0.66.1",
+    "react-native-immediate-phone-call": "^2.0.0"
   }
 }
