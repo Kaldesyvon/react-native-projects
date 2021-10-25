@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {View, StyleSheet, Text, Pressable, Image, ToastAndroid} from 'react-native';
 import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
 
-
 const styles = StyleSheet.create({
     header: {
         flex: 1,
@@ -93,7 +92,7 @@ export default function App() {
     }
 
     function makeCall() {
-        if(getNumber === ''){
+        if(getNumber === '' || (getNumber.length === 1 && getNumber === '+')){
             return () => ToastAndroid.showWithGravity('Please, enter a number', 1500, ToastAndroid.CENTER);
         }
         return () => RNImmediatePhoneCall.immediatePhoneCall(getNumber);
