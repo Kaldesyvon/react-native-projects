@@ -92,10 +92,10 @@ export default function App() {
     }
 
     function makeCall() {
-        if(getNumber === '' || (getNumber.length === 1 && getNumber === '+')){
-            return () => ToastAndroid.showWithGravity('Please, enter a number', 1500, ToastAndroid.CENTER);
+        if(!(getNumber === '' || (getNumber.length === 1 && (getNumber === '+' || getNumber === '#' ||getNumber === '*')))){
+            // return () => ToastAndroid.showWithGravity('Please, enter a number', 1500, ToastAndroid.CENTER);
+            return () => RNImmediatePhoneCall.immediatePhoneCall(getNumber);
         }
-        return () => RNImmediatePhoneCall.immediatePhoneCall(getNumber);
     }
 
     return (
