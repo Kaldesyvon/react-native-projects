@@ -1,7 +1,7 @@
 {
-  "name": "smart-2021",
+  "name": "hubbletracker",
   "version": "1.0.0",
-  "description": "projcts dir for smart",
+  "description": "app will track hubble telescope. james webb is not included due to small amount of data",
   "main": "index.js",
   "repository": "https://git.kpi.fei.tuke.sk/martin.novysedlak.2/smart-2021.git",
   "author": "Martin Novysedlak <martin.novysedlak.2@student.tuke.sk>",
