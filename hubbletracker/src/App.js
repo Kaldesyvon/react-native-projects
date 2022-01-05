@@ -19,7 +19,7 @@ export default function App(){
                 <Tab.Screen name='POV' component={POV}/>
                 <Tab.Screen name='Gallery' component={Gallery}/>
                 <Tab.Screen name='Intersect' component={Intersect}/>
-                <Tab.Screen name='NPOD' component={NPOD}/>
+                <Tab.Screen name='Astronomical Picture of the Day' component={NPOD}/>
             </Tab.Navigator>
         </NavigationContainer>
     )
