@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {View, Image, Text, StyleSheet, ScrollView, Linking} from 'react-native';
 import {Component} from 'react/cjs/react.production.min';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,16 +18,12 @@ export default class NPOD extends Component {
         this.init();
     }
 
-    replacer(value) {
-        return value.replace(/\\/g, '');
-    }
-
     async init() {
         await this.fetchPicture();
-        this.updateURL(this.state);
+        this.updateState();
     }
 
-    async updateURL(e) {
+    async updateState() {
         this.state.title = await this.getTitle();
         this.state.date = await this.getDate();
         this.state.copyright = await this.getCopyright();

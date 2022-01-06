@@ -4,9 +4,11 @@ import {Component} from 'react/cjs/react.production.min';
 
 export default class POV extends Component {
     state = {
-        url: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fanatomised.com%2Fwp-content%2Fuploads%2F2016%2F05%2Fspinner-test4.gif&f=1&nofb=1',
-        explanation: '',
+        what_am_i_looking_at: 'Hubble is acquiring new target',
     };
+
+    _isMounted = false;
+
     constructor() {
         super();
         this.init();
@@ -16,22 +18,45 @@ export default class POV extends Component {
         await this.fetchPicture();
     }
 
-    updateContent = (e) => {
-        this.setState({
-            url: e.url,
-            explanation: e.explanation
-        })
+    componentDidMount() {
+        this._isMounted = true;
+        this.timerId = setInterval(() => this.fetchPicture, 10000);
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+        clearInterval(this.timerId);
+    }
+
+    updateContent = e => {
+        this.setState(e);
+    };
+
+    chooseImage() {
+        if (this.state.hasOwnProperty('reference_image_url')) {
+            return (
+                <Image
+                    style={styles.image}
+                    source={{uri: this.state.reference_image_url}}
+                />
+            );
+        } else {
+            return (
+                <Image
+                    style={styles.image}
+                    source={require('../images/placeholder_for_missing_image.jpeg')}
+                />
+            );
+        }
     }
 
     async fetchPicture() {
         await fetch(
-            'https://api.spacetelescopelive.org/observation_timeline/latest',
+            'https://api.spacetelescopelive.org/observation_timelines/latest',
         )
             .then(response => response.json())
             .then(responseJson => {
-                // this.updateContent(responseJson)
-                console.log(this.state.what_am_i_looking_at);
-                console.log(this.state.url);
+                this.updateContent(responseJson);
             })
             .catch(error => console.log('pov ' + error));
     }
@@ -39,9 +64,37 @@ export default class POV extends Component {
     render() {
         return (
             <ScrollView /* style={{width: 300, height: 300}} */>
-                <Image source={{uri: this.state.url}} />
-                <Text>{this.state.explanation}</Text>
+                <View>
+                    {this.chooseImage()}
+                    <Text>{this.state.what_am_i_looking_at}</Text>
+                </View>
             </ScrollView>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    title: {
+        color: 'black',
+        fontSize: 25,
+    },
+    date: {
+        color: 'black',
+        fontSize: 20,
+    },
+    image: {
+        alignSelf: 'center',
+        marginRight: 10,
+        height: 300,
+        width: 300,
+    },
+    explanation: {
+        color: 'black',
+        fontSize: 20,
+    },
+    hdurl: {
+        alignSelf: 'center',
+        color: 'blue',
+        fontSize: 20,
+    },
+});
