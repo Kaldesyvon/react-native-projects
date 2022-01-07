@@ -1,43 +1,32 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {View, Image, Text, StyleSheet, ScrollView} from 'react-native';
 import {Component} from 'react/cjs/react.production.min';
 
-export default class POV extends Component {
-    state = {
+export default function POV() {
+    const[state, setState] = useState({
         what_am_i_looking_at: 'Hubble is acquiring new target',
-    };
+    })
 
-    _isMounted = false;
+    useEffect(() => {
+        async function fetchPicture(){
+            await fetch(
+                'https://api.spacetelescopelive.org/observation_timelines/latest',
+            )
+                .then(response => response.json())
+                .then(responseJson => {
+                    setState(responseJson);
+                })
+                .catch(error => console.log('pov ' + error));
+        }
+        fetchPicture()
+    }, [])
 
-    constructor() {
-        super();
-        this.init();
-    }
-
-    async init() {
-        await this.fetchPicture();
-    }
-
-    componentDidMount() {
-        this._isMounted = true;
-        this.timerId = setInterval(() => this.fetchPicture, 10000);
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false;
-        clearInterval(this.timerId);
-    }
-
-    updateContent = e => {
-        this.setState(e);
-    };
-
-    chooseImage() {
-        if (this.state.hasOwnProperty('reference_image_url')) {
+    const chooseImage = () => {
+        if (state.reference_image_url) {
             return (
                 <Image
                     style={styles.image}
-                    source={{uri: this.state.reference_image_url}}
+                    source={{uri: state.reference_image_url}}
                 />
             );
         } else {
@@ -50,27 +39,14 @@ export default class POV extends Component {
         }
     }
 
-    async fetchPicture() {
-        await fetch(
-            'https://api.spacetelescopelive.org/observation_timelines/latest',
-        )
-            .then(response => response.json())
-            .then(responseJson => {
-                this.updateContent(responseJson);
-            })
-            .catch(error => console.log('pov ' + error));
-    }
-
-    render() {
-        return (
-            <ScrollView /* style={{width: 300, height: 300}} */>
-                <View>
-                    {this.chooseImage()}
-                    <Text>{this.state.what_am_i_looking_at}</Text>
-                </View>
-            </ScrollView>
+    return (
+        <ScrollView /* style={{width: 300, height: 300}} */>
+            <View>
+                {chooseImage()}
+                <Text>{state.what_am_i_looking_at}</Text>
+            </View>
+        </ScrollView>
         );
-    }
 }
 
 const styles = StyleSheet.create({
