@@ -2,8 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
+import {useTranslation} from 'react-i18next';
 
 export default function Intersect() {
+    const {t, i18n} = useTranslation();
+
     const [userCoords, setUserCoords] = useState({
         longitude: 0,
         latitude: 0,
@@ -105,7 +108,9 @@ export default function Intersect() {
                 />
             </MapView>
             {hubbleCoords.length === 0 && (
-                <Text style={styles.text}>Please, wait. Retrieving data.</Text>
+                <Text style={styles.text}>
+                    {t('Please, wait. Retrieving data.')}
+                </Text>
             )}
         </View>
     );

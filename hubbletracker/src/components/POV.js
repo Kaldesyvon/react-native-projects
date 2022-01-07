@@ -1,14 +1,36 @@
 import React, {useEffect, useState} from 'react';
 import {View, Image, Text, StyleSheet, ScrollView} from 'react-native';
-import {Component} from 'react/cjs/react.production.min';
+import {useTranslation} from 'react-i18next';
 
 export default function POV() {
-    const[state, setState] = useState({
-        what_am_i_looking_at: 'Hubble is acquiring new target',
-    })
+    const {t, i18n} = useTranslation();
+
+    const [state, setState] = useState({
+        what_am_i_looking_at: t('Hubble is acquiring new target'),
+    });
+
+    const formatText = async () => {
+        if (state.hasOwnProperty('begin_at')) {
+            setState({
+                ...state,
+                what_am_i_looking_at: `${t('Between')} ${state.begin_at.slice(
+                    11,
+                    16,
+                )} ${t('and')} ${state.end_at.slice(11, 16)} ${t(
+                    'on',
+                )} ${new Date().toLocaleDateString()} ${t(
+                    'Hubble is looking at',
+                )} ${state.target_name} ${t('with')} ${
+                    state.science_instrument
+                } (${state.science_instrument_acronym}) ${t('for')} ${
+                    state.principal_investigator_full_name
+                }.`,
+            });
+        }
+    };
 
     useEffect(() => {
-        async function fetchPicture(){
+        async function fetchPicture() {
             await fetch(
                 'https://api.spacetelescopelive.org/observation_timelines/latest',
             )
@@ -16,10 +38,17 @@ export default function POV() {
                 .then(responseJson => {
                     setState(responseJson);
                 })
+                .then(() => {
+                    formatText();
+                })
                 .catch(error => console.log('pov ' + error));
         }
-        fetchPicture()
-    }, [])
+        fetchPicture();
+    }, []);
+
+    useEffect(() => {
+        formatText();
+    }, [state.what_am_i_looking_at]);
 
     const chooseImage = () => {
         if (state.reference_image_url) {
@@ -37,8 +66,9 @@ export default function POV() {
                 />
             );
         }
-    }
+    };
 
+    console.log('renderrrer');
     return (
         <ScrollView /* style={{width: 300, height: 300}} */>
             <View>
@@ -46,7 +76,7 @@ export default function POV() {
                 <Text>{state.what_am_i_looking_at}</Text>
             </View>
         </ScrollView>
-        );
+    );
 }
 
 const styles = StyleSheet.create({

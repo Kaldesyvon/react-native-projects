@@ -1,9 +1,8 @@
-import React, {useEffect, useState} from 'react';;
+import React, {useEffect, useState} from 'react';
 import {View, Image, Text, StyleSheet, ScrollView, Linking} from 'react-native';
-import {Component} from 'react/cjs/react.production.min';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function NPOD(props) {
+export default function NPOD() {
     const [state, setState] = useState({
         title: '',
         date: '',
@@ -11,10 +10,10 @@ export default function NPOD(props) {
         url: 'https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif',
         explanation: '',
         hdurl: '',
-    })
+    });
 
     useEffect(() => {
-        getDataAndSetState('apod')
+        getDataAndSetState('apod');
         async function fetchPicture() {
             await fetch(
                 'https://api.nasa.gov/planetary/apod?api_key=zagIQUrOh1phJr6NEDIF9uv6BPPTn9QPTO3ebgsO',
@@ -25,8 +24,8 @@ export default function NPOD(props) {
                 })
                 .catch(error => console.error('fetch error ' + error));
         }
-        fetchPicture()
-    }, [props])
+        fetchPicture();
+    }, []);
 
     const storeData = async (key, value) => {
         try {
@@ -39,16 +38,16 @@ export default function NPOD(props) {
         } catch (e) {
             console.error('error storing data' + e);
         }
-    }
+    };
 
-    const getDataAndSetState = async (key) => {
+    const getDataAndSetState = async key => {
         try {
             const value = await AsyncStorage.getItem(key);
-            setState(JSON.parse(value))
+            setState(JSON.parse(value));
         } catch (e) {
             console.error('error getting data' + e);
         }
-    }
+    };
 
     return (
         <ScrollView style={{marginLeft: 10}}>
@@ -57,14 +56,9 @@ export default function NPOD(props) {
                 <Text style={styles.date}>{state.date}</Text>
                 <Text style={styles.date}>{state.copyright}</Text>
                 <View style={styles.block}>
-                    <Image
-                        style={styles.image}
-                        source={{uri: state.url}}
-                    />
+                    <Image style={styles.image} source={{uri: state.url}} />
                 </View>
-                <Text style={styles.explanation}>
-                    {state.explanation}
-                </Text>
+                <Text style={styles.explanation}>{state.explanation}</Text>
                 <Text
                     style={styles.hdurl}
                     onPress={() => Linking.openURL(`${state.hdurl}`)}>
