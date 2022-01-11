@@ -16,7 +16,7 @@ export default function POV() {
                 what_am_i_looking_at: `${t('Between')} ${state.begin_at.slice(
                     11,
                     16,
-                )} ${t('and')} ${state.end_at.slice(11, 16)} ${t(
+                )} ${t('and')} ${state.end_at.slice(11, 16)} UTC ${t(
                     'on',
                 )} ${new Date().toLocaleDateString()} ${t(
                     'Hubble is looking at',
@@ -26,6 +26,12 @@ export default function POV() {
                     state.principal_investigator_full_name
                 }.`,
             });
+        }
+        else{
+            setState({
+                ...state,
+                what_am_i_looking_at: t('Hubble is acquiring new target')
+            })
         }
     };
 
@@ -68,39 +74,35 @@ export default function POV() {
         }
     };
 
-    console.log('renderrrer');
     return (
         <ScrollView /* style={{width: 300, height: 300}} */>
-            <View>
+            <View style={styles.view}>
                 {chooseImage()}
-                <Text>{state.what_am_i_looking_at}</Text>
+                <Text style={styles.text}>{state.what_am_i_looking_at}</Text>
             </View>
         </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    title: {
-        color: 'black',
-        fontSize: 25,
-    },
-    date: {
-        color: 'black',
-        fontSize: 20,
-    },
     image: {
         alignSelf: 'center',
         marginRight: 10,
         height: 300,
         width: 300,
     },
-    explanation: {
-        color: 'black',
-        fontSize: 20,
+    view: {
+        width: 'auto',
+        padding: 10,
+        // height: 300,
     },
-    hdurl: {
-        alignSelf: 'center',
-        color: 'blue',
-        fontSize: 20,
+    // image: {
+    //     width: '100%',
+    //     height: '100%',
+    // },
+    text:{
+        width: 'auto',
+        padding: 10,
+        height: 'auto'
     },
 });

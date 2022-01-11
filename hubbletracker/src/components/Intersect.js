@@ -1,5 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Platform,
+    PermissionsAndroid,
+} from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
 import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 import {useTranslation} from 'react-i18next';
@@ -7,18 +13,43 @@ import {useTranslation} from 'react-i18next';
 export default function Intersect() {
     const {t, i18n} = useTranslation();
 
-    const [userCoords, setUserCoords] = useState({
-        longitude: 0,
-        latitude: 0,
-    });
+    const [userCoords, setUserCoords] = useState({});
 
     const [hubbleCoords, setHubbleCoords] = useState([]);
 
     useEffect(() => {
+        getPermissions();
         getPosition();
         const interval = setInterval(() => fetchHubbleCoords(), 10000);
         return () => clearInterval(interval);
-    }, []);
+    }, [hubbleCoords]);
+
+    const getPermissions = async () => {
+        try{
+            let GPSAllowed = true;
+            if (Platform.OS === 'android') {
+                // console.log('pytam si gps')
+                const granted = await PermissionsAndroid.request(
+                    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+                    {
+                        title: t('Allow GPS'),
+                        message: t('For better experience allow GPS, so you can see when will Hubble will be above you'),
+                        buttonNeutral: t('Ask me later'),
+                        buttonNegative: t('Cancel'),
+                        buttonPositive: 'OK',
+                    },
+                    );
+                // GPSAllowed = granted == PermissionsAndroid.RESULTS.GRANTED;
+                if (GPSAllowed === granted) {
+                    getPosition();
+                    forceUpdate
+                }
+            }
+        }
+        catch(e){
+            console.warn(e)
+        }
+    };
 
     const fetchHubbleCoords = async () => {
         console.log('am about to fetch');
@@ -49,6 +80,20 @@ export default function Intersect() {
             },
             {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
         );
+    };
+
+    const showUserPos = () => {
+        if (userCoords.hasOwnProperty('longitude') && userCoords.hasOwnProperty('latitude')) {
+            return (
+                <Marker
+                    key={'user'}
+                    coordinate={{
+                        longitude: userCoords.longitude,
+                        latitude: userCoords.latitude,
+                    }}
+                />
+            );
+        }
     };
 
     return (
@@ -99,13 +144,7 @@ export default function Intersect() {
                         return;
                     }
                 })}
-                <Marker
-                    key={'user'}
-                    coordinate={{
-                        longitude: userCoords.longitude,
-                        latitude: userCoords.latitude,
-                    }}
-                />
+                {showUserPos()}
             </MapView>
             {hubbleCoords.length === 0 && (
                 <Text style={styles.text}>
