@@ -25,29 +25,28 @@ export default function Intersect() {
     }, []);
 
     const getPermissions = async () => {
-        try{
+        try {
             let GPSAllowed = true;
             if (Platform.OS === 'android') {
-                // console.log('pytam si gps')
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                     {
                         title: t('Allow GPS'),
-                        message: t('For better experience allow GPS, so you can see when will Hubble will be above you'),
+                        message: t(
+                            'For better experience allow GPS, so you can see when will Hubble will be above you',
+                        ),
                         buttonNeutral: t('Ask me later'),
                         buttonNegative: t('Cancel'),
                         buttonPositive: 'OK',
                     },
-                    );
-                // GPSAllowed = granted == PermissionsAndroid.RESULTS.GRANTED;
+                );
                 if (GPSAllowed === granted) {
                     getPosition();
-                    forceUpdate
+                    forceUpdate;
                 }
             }
-        }
-        catch(e){
-            console.warn(e)
+        } catch (e) {
+            console.warn(e);
         }
     };
 
@@ -83,7 +82,10 @@ export default function Intersect() {
     };
 
     const showUserPos = () => {
-        if (userCoords.hasOwnProperty('longitude') && userCoords.hasOwnProperty('latitude')) {
+        if (
+            userCoords.hasOwnProperty('longitude') &&
+            userCoords.hasOwnProperty('latitude')
+        ) {
             return (
                 <Marker
                     key={'user'}

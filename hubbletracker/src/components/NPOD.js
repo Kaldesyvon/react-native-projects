@@ -1,12 +1,27 @@
-import React, {useEffect, useState} from 'react';
-import {View, Image, Text, StyleSheet, ScrollView, Linking} from 'react-native';
+import React, {useEffect, useState, useReducer} from 'react';
+import {
+    View,
+    Image,
+    Text,
+    StyleSheet,
+    ScrollView,
+    Linking,
+    Platform,
+    PermissionsAndroid,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNFetchBlob from 'rn-fetch-blob';
 import {useTranslation} from 'react-i18next';
 
+// function useForceUpdate(){
+//     const [value, setValue] = useState(0); // integer state
+//     return () => setValue(value => value + 1); // update the state to force render
+// }
+
 export default function NPOD() {
     const {t, i18b} = useTranslation();
     const pathToImage = '/storage/emulated/0/Pictures/hubbletracker/NPOD.jpg';
+    const [, forceUpdate] = useReducer(x => x + 1, 0);
     const [state, setState] = useState({
         title: '',
         date: '',
@@ -17,6 +32,7 @@ export default function NPOD() {
     });
 
     useEffect(() => {
+        getPermisions()
         getDataAndSetState('apod');
         async function fetchPicture() {
             await fetch(
@@ -56,18 +72,50 @@ export default function NPOD() {
         }
     };
 
-    const savePicture = image_URL => {
-        RNFetchBlob.config({
-            path: pathToImage,
-            overwrite: true,
-        })
-            .fetch('GET', image_URL)
-            .then(res => {
-                console.log('The file saved to ', res.path());
+    const savePicture = async image_URL => {
+        if (await getPermisions()) {
+            await RNFetchBlob.config({
+                path: pathToImage,
+                overwrite: true,
             })
-            .catch(e => conosle.log(e));
+                .fetch('GET', image_URL)
+                .then(res => {
+                    console.log('The file saved to', res.path());
+                })
+                .catch(e => console.log(e));
+        }
+        forceUpdate();
     };
 
+    const getPermisions = async () => {
+        try {
+            let granted;
+            if (Platform.OS === 'android') {
+                console.log('pytam sa o permisie v sustakoch');
+                granted = await PermissionsAndroid.requestMultiple([
+                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+                ]);
+                // granted = await PermissionsAndroid.request(
+                //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                //     {
+                //         title: t('Allow write to storage'),
+                //         message: t(
+                //             'For better experience allow Storage write, so you can tommorow see what picture NASA has chosen today',
+                //         ),
+                //         buttonNeutral: t('Ask me later'),
+                //         buttonNegative: t('Cancel'),
+                //         buttonPositive: 'OK',
+                //     },
+                // );
+            }
+            return granted;
+        } catch (e) {
+            console.warn(e);
+        }
+    };
+
+    console.debug('renderrer');
     return (
         <ScrollView style={{marginLeft: 10}}>
             <View>

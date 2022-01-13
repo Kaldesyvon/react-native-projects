@@ -38,6 +38,9 @@ const resources = {
                 'Táto snímka z Hubbleovho teleskopu, zachytená a zverejnená na oslavu 23. roku na obežnej dráhe teleskopu, ukazuje časť oblohy v súhvezdí Orion. Hmlovina Konská hlava, inak známa ako Barnard 33, sa týči ako obrovský morský koník z turbulentných vĺn prachu a plynu. Tento obrázok ukazuje oblasť v infračervenom svetle, ktoré má dlhšie vlnové dĺžky ako viditeľné svetlo a môže preniknúť cez prašný materiál, ktorý zvyčajne zakrýva vnútorné oblasti hmloviny. Výsledkom je skôr éterická a krehko vyzerajúca štruktúra, vyrobená z jemných záhybov plynu – veľmi odlišná od vzhľadu hmloviny vo viditeľnom svetle.',
             "This image provides a detailed look at the tattered remains of a supernova explosion known as Cassiopeia A (Cas A). Itis the youngest known remnant from a supernova explosion inthe Milky Way. The new Hubble image shows the complex andintricate structure of the star's shattered fragments.":
                 'Táto snímka poskytuje detailný pohľad na roztrhané pozostatky po výbuchu supernovy známej ako Cassiopeia A (Cas A). Ide o najmladší známy pozostatok po výbuchu supernovy v Mliečnej dráhe. Nová snímka HST ukazuje zložitú a komplexnú štruktúru rozbitých fragmentov hviezdy. ',
+            'Allow write to storage': 'Povoľ zápis do úložiska',
+            'For better experience allow Storage write, so you can tommorow see what picture NASA has chosen today':
+                'Pre lepší pôžitok povoľ zápis do mobilu, aby si zajtra videl obrázok čo vybrala NASA.',
         },
     },
 };
