@@ -22,7 +22,7 @@ export default function Intersect() {
         getPosition();
         const interval = setInterval(() => fetchHubbleCoords(), 10000);
         return () => clearInterval(interval);
-    }, [hubbleCoords]);
+    }, []);
 
     const getPermissions = async () => {
         try{

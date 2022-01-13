@@ -1,13 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import {View, Image, Text, StyleSheet, ScrollView, Linking} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNFetchBlob from 'rn-fetch-blob';
+import {useTranslation} from 'react-i18next';
 
 export default function NPOD() {
+    const {t, i18b} = useTranslation();
+    const pathToImage = '/storage/emulated/0/Pictures/hubbletracker/NPOD.jpg';
     const [state, setState] = useState({
         title: '',
         date: '',
         copyright: '',
-        url: 'https://c.tenor.com/I6kN-6X7nhAAAAAj/loading-buffering.gif',
+        url: '',
         explanation: '',
         hdurl: '',
     });
@@ -21,8 +25,10 @@ export default function NPOD() {
                 .then(response => response.json())
                 .then(responseJson => {
                     storeData('apod', responseJson);
+                    savePicture(responseJson.url);
                 })
                 .catch(error => console.error('fetch error ' + error));
+            console.log('data fetched');
         }
         fetchPicture();
     }, []);
@@ -38,6 +44,7 @@ export default function NPOD() {
         } catch (e) {
             console.error('error storing data' + e);
         }
+        console.log('data stored');
     };
 
     const getDataAndSetState = async key => {
@@ -49,6 +56,18 @@ export default function NPOD() {
         }
     };
 
+    const savePicture = image_URL => {
+        RNFetchBlob.config({
+            path: pathToImage,
+            overwrite: true,
+        })
+            .fetch('GET', image_URL)
+            .then(res => {
+                console.log('The file saved to ', res.path());
+            })
+            .catch(e => conosle.log(e));
+    };
+
     return (
         <ScrollView style={{marginLeft: 10}}>
             <View>
@@ -56,7 +75,10 @@ export default function NPOD() {
                 <Text style={styles.date}>{state.date}</Text>
                 <Text style={styles.date}>{state.copyright}</Text>
                 <View style={styles.block}>
-                    <Image style={styles.image} source={{uri: state.url}} />
+                    <Image
+                        style={styles.image}
+                        source={{uri: 'file:' + pathToImage}}
+                    />
                 </View>
                 <Text style={styles.explanation}>{state.explanation}</Text>
                 <Text
