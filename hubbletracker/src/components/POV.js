@@ -37,6 +37,7 @@ export default function POV() {
 
     useEffect(() => {
         async function fetchPicture() {
+            console.log('fetching hubbles view')
             await fetch(
                 'https://api.spacetelescopelive.org/observation_timelines/latest',
             )
@@ -49,7 +50,8 @@ export default function POV() {
                 })
                 .catch(error => console.log('pov ' + error));
         }
-        fetchPicture();
+        const interval = setInterval(() => fetchPicture(), 10000);
+        return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {
@@ -75,7 +77,7 @@ export default function POV() {
     };
 
     return (
-        <ScrollView /* style={{width: 300, height: 300}} */>
+        <ScrollView>
             <View style={styles.view}>
                 {chooseImage()}
                 <Text style={styles.text}>{state.what_am_i_looking_at}</Text>

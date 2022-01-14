@@ -32,7 +32,7 @@ export default function NPOD() {
     });
 
     useEffect(() => {
-        getPermisions()
+        getPermisions();
         getDataAndSetState('apod');
         async function fetchPicture() {
             await fetch(
@@ -73,45 +73,40 @@ export default function NPOD() {
     };
 
     const savePicture = async image_URL => {
-        if (await getPermisions()) {
-            await RNFetchBlob.config({
-                path: pathToImage,
-                overwrite: true,
+        await getPermisions();
+        await RNFetchBlob.config({
+            path: pathToImage,
+            overwrite: true,
+        })
+            .fetch('GET', image_URL)
+            .then(res => {
+                console.log('The file saved to', res.path());
             })
-                .fetch('GET', image_URL)
-                .then(res => {
-                    console.log('The file saved to', res.path());
-                })
-                .catch(e => console.log(e));
-        }
-        forceUpdate();
+            .catch(e => console.log(e));
+
+        // forceUpdate();
     };
 
     const getPermisions = async () => {
-        try {
-            let granted;
-            if (Platform.OS === 'android') {
-                console.log('pytam sa o permisie v sustakoch');
-                granted = await PermissionsAndroid.requestMultiple([
-                    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-                ]);
-                // granted = await PermissionsAndroid.request(
-                //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-                //     {
-                //         title: t('Allow write to storage'),
-                //         message: t(
-                //             'For better experience allow Storage write, so you can tommorow see what picture NASA has chosen today',
-                //         ),
-                //         buttonNeutral: t('Ask me later'),
-                //         buttonNegative: t('Cancel'),
-                //         buttonPositive: 'OK',
-                //     },
-                // );
-            }
-            return granted;
-        } catch (e) {
-            console.warn(e);
+        if (Platform.OS === 'android') {
+            console.log('pytam sa o permisie v sustakoch');
+            granted = await PermissionsAndroid.requestMultiple([
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
+            ]);
+            Promise.resolve();
+            // granted = await PermissionsAndroid.request(
+            //     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            //     {
+            //         title: t('Allow write to storage'),
+            //         message: t(
+            //             'For better experience allow Storage write, so you can tommorow see what picture NASA has chosen today',
+            //         ),
+            //         buttonNeutral: t('Ask me later'),
+            //         buttonNegative: t('Cancel'),
+            //         buttonPositive: 'OK',
+            //     },
+            // );
         }
     };
 

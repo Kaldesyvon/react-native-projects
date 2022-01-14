@@ -18,7 +18,6 @@ export default function Intersect() {
     const [hubbleCoords, setHubbleCoords] = useState([]);
 
     useEffect(() => {
-        getPermissions();
         getPosition();
         const interval = setInterval(() => fetchHubbleCoords(), 10000);
         return () => clearInterval(interval);
@@ -26,9 +25,8 @@ export default function Intersect() {
 
     const getPermissions = async () => {
         try {
-            let GPSAllowed = true;
             if (Platform.OS === 'android') {
-                const granted = await PermissionsAndroid.request(
+                await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                     {
                         title: t('Allow GPS'),
@@ -40,10 +38,7 @@ export default function Intersect() {
                         buttonPositive: 'OK',
                     },
                 );
-                if (GPSAllowed === granted) {
-                    getPosition();
-                    forceUpdate;
-                }
+                Promise.resolve()
             }
         } catch (e) {
             console.warn(e);
@@ -66,7 +61,8 @@ export default function Intersect() {
             .catch(e => console.log(e));
     };
 
-    const getPosition = () => {
+    const getPosition = async () => {
+        await getPermissions()
         Geolocation.getCurrentPosition(
             position => {
                 setUserCoords({
@@ -75,6 +71,7 @@ export default function Intersect() {
                 });
             },
             error => {
+                console.log('nedam')
                 console.log(error.code, error.message);
             },
             {enableHighAccuracy: true, timeout: 15000, maximumAge: 10000},
